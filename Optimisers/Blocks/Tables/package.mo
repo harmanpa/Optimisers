@@ -24,7 +24,7 @@ protected
   parameter Integer[2] tableSize=if tableOnFile then
       Modelica.Utilities.Streams.readMatrixSize(filename, tablename) else {size(
       table, 1),size(table, 2)};
-  parameter Real[:, :] data=if tableOnFile then
+  parameter Real[tableSize[1], tableSize[2]] data=if tableOnFile then
       Modelica.Utilities.Streams.readRealMatrix(
         filename,
         tablename,
@@ -105,14 +105,17 @@ protected
           true);
     end appendMatrix;
 
-  equation
-  when {initial(),trigger} then
-    row = pre(row) + 1;
-    appendMatrix(
+  algorithm
+  when {initial(), trigger} then
+    // Note: following if is required due to OMC calling "when initial()" clause multiple times
+    if trigger or row==0 then
+      row := pre(row) + 1;
+      appendMatrix(
         filename,
         tablename,
         row,
         u);
+      end if;
   end when;
   annotation (Icon(graphics={
         Polygon(
@@ -133,4 +136,17 @@ protected
         Line(points={{0,-78},{0,-60},{-64,-60},{-64,26},{-54,26}}, color={255,0,
               255})}));
   end TriggeredTableWrite;
+
+
+
+
+
+
+
+
+
+
+
+
+
 end Tables;
