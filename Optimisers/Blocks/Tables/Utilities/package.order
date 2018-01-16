@@ -1,0 +1,6 @@
+readTableSize
+readTable
+appendTable
+writeTable
+isMATFile
+isCSVFile

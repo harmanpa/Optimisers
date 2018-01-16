@@ -1,5 +1,5 @@
 within Optimisers;
 package Interfaces "Optimiser interfaces"
-extends Modelica.Icons.Package;
+extends Modelica.Icons.InterfacesPackage;
 
 end Interfaces;

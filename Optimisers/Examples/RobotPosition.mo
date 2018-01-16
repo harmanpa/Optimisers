@@ -31,8 +31,8 @@ model RobotPosition "Calculate target positions for 6DoF robot"
     annotation (Placement(transformation(extent={{-72,-52},{-52,-32}})));
   Blocks.Tables.TriggeredTableWrite triggeredTableWrite(
     nin=6,
-    filename="RobotPositionOutput.mat",
-    tablename="angles")
+    tablename="angles",
+    filename="RobotPositionOutput.csv")
     annotation (Placement(transformation(extent={{80,-80},{100,-60}})));
   Modelica.Mechanics.Rotational.Sensors.AngleSensor angleSensor[6]
     annotation (Placement(transformation(extent={{48,-80},{68,-60}})));
@@ -106,7 +106,7 @@ equation
     annotation (Line(points={{48,-70},{30,-70},{30,14},{20,14}}, color={0,0,0}));
   connect(modelOptimiser.done, triggeredTableWrite.trigger) annotation (Line(
         points={{-30,0},{-30,8},{-94,8},{-94,-66},{-16,-66},{-16,-94},{90,-94},
-          {90,-80}},color={255,0,255}));
+          {90,-80}}, color={255,0,255}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),

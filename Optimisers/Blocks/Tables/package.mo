@@ -20,12 +20,10 @@ block TriggeredTableRead "Output single row, increment with Boolean trigger"
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-50,100})));
-protected
-  parameter Integer[2] tableSize=if tableOnFile then
-      Modelica.Utilities.Streams.readMatrixSize(filename, tablename) else {size(
-      table, 1),size(table, 2)};
-  parameter Real[tableSize[1], tableSize[2]] data=if tableOnFile then
-      Modelica.Utilities.Streams.readRealMatrix(
+  //protected
+  parameter Integer[2] tableSize=if tableOnFile then Utilities.readTableSize(
+      filename, tablename) else {size(table, 1),size(table, 2)};
+  Real[tableSize[1], tableSize[2]] data=if tableOnFile then Utilities.readTable(
         filename,
         tablename,
         tableSize[1],
@@ -62,6 +60,10 @@ public
               255})}), Diagram(coordinateSystem(preserveAspectRatio=false)));
   end TriggeredTableRead;
 
+
+
+
+
 block TriggeredTableWrite
   "Write single row to file, increment with Boolean trigger"
   extends Modelica.Blocks.Interfaces.BlockIcon;
@@ -80,42 +82,17 @@ block TriggeredTableWrite
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={0,100})));
-protected
-  function appendMatrix
-    input String filename;
-    input String tablename;
-    input Integer nRow;
-    input Real[:] rowData;
-  protected
-    Integer nCols=size(rowData, 1);
-    Real[nRow, size(rowData, 1)] table;
-    algorithm
-    if nRow > 1 then
-      table[1:nRow - 1, :] := Modelica.Utilities.Streams.readRealMatrix(
-            filename,
-            tablename,
-            nRow - 1,
-            nCols);
-    end if;
-    table[nRow, :] := rowData;
-    Modelica.Utilities.Streams.writeRealMatrix(
+  algorithm
+  when {initial(),trigger} then
+    // Note: following if is required due to OMC calling "when initial()" clause multiple times
+    if trigger or row == 0 then
+      row := pre(row) + 1;
+      Utilities.appendTable(
           filename,
           tablename,
-          table,
-          true);
-    end appendMatrix;
-
-  algorithm
-  when {initial(), trigger} then
-    // Note: following if is required due to OMC calling "when initial()" clause multiple times
-    if trigger or row==0 then
-      row := pre(row) + 1;
-      appendMatrix(
-        filename,
-        tablename,
-        row,
-        u);
-      end if;
+          row,
+          u);
+    end if;
   end when;
   annotation (Icon(graphics={
         Polygon(
@@ -148,5 +125,22 @@ protected
 
 
 
-
+annotation (Icon(graphics={
+      Rectangle(
+        extent={{-76,-26},{80,-76}},
+        lineColor={95,95,95},
+        fillColor={235,235,235},
+        fillPattern=FillPattern.Solid),
+      Rectangle(
+        extent={{-76,24},{80,-26}},
+        lineColor={95,95,95},
+        fillColor={235,235,235},
+        fillPattern=FillPattern.Solid),
+      Rectangle(
+        extent={{-76,74},{80,24}},
+        lineColor={95,95,95},
+        fillColor={235,235,235},
+        fillPattern=FillPattern.Solid),
+      Line(points={{-28,74},{-28,-76}}, color={95,95,95}),
+      Line(points={{24,74},{24,-76}}, color={95,95,95})}));
 end Tables;

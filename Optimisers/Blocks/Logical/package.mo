@@ -11,16 +11,19 @@ block Stop "Stop simulation on Boolean input"
   end when;
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Polygon(
-          points={{-80,36},{-80,-36},{-36,-80},{36,-80},{80,-36},{80,36},{36,80},
-              {-36,80},{-80,36}},
-          lineColor={0,0,0},
-          fillColor={255,0,0},
-          fillPattern=FillPattern.Solid), Text(
-          extent={{-46,34},{44,-26}},
-          lineColor={255,255,255},
-          fillColor={255,0,0},
-          fillPattern=FillPattern.Solid,
-          textString="Stop")}), Diagram(coordinateSystem(preserveAspectRatio=
+            points={{-80,36},{-80,-36},{-36,-80},{36,-80},{80,-36},{80,36},{36,
+            80},{-36,80},{-80,36}},
+            lineColor={0,0,0},
+            fillColor={255,0,0},
+            fillPattern=FillPattern.Solid),Text(
+            extent={{-46,34},{44,-26}},
+            lineColor={255,255,255},
+            fillColor={255,0,0},
+            fillPattern=FillPattern.Solid,
+            textString="Stop")}), Diagram(coordinateSystem(preserveAspectRatio=
             false)));
   end Stop;
+
+annotation (Icon(graphics={Line(points={{-86,-22},{-50,-22},{-50,22},{48,22},{
+            48,-22},{88,-24}}, color={255,0,255})}));
 end Logical;

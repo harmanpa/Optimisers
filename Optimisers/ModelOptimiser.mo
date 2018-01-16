@@ -1,7 +1,9 @@
 within Optimisers;
 model ModelOptimiser "Optimiser"
   extends Modelica.Blocks.Icons.Block;
-  Real f;
+  parameter Boolean maximise=false
+    "if true then maximise objective, else minimise";
+
 
   ActuatorPort actuatorPort[nActuators] "Connectors for actuators"
     annotation (Placement(transformation(extent={{90,40},{110,60}})));
@@ -32,6 +34,7 @@ model ModelOptimiser "Optimiser"
       group="Ports"));
   parameter Real actuatorTolerance=1e-8 "Accuracy of actuated signals";
 protected
+  Real f;
   Optimisers.Types.OptimiserObject opt=Optimisers.Types.OptimiserObject(n=
       nActuators, m=nConstraints);
   connector ActuatorPort
@@ -58,7 +61,7 @@ equation
     nActuators}) <= nActuators*actuatorTolerance;
   x = {actuatorPort[i].goalF for i in 1:nActuators};
   c = {constraintPort[i].constraint for i in 1:nConstraints};
-  f = objective;
+  f = if maximise then -objective else objective;
   when pre(ready) and pre(iterate) then
     (continue,x) = Functions.iterate(
       opt,

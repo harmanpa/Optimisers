@@ -7,8 +7,8 @@ model RobotPositionForwards "Use calculated target positions for 6DoF robot"
     annotation (Placement(transformation(extent={{0,-24},{20,-4}})));
   Blocks.Tables.TriggeredTableRead triggeredTableRead(
     tableOnFile=true,
-    filename="RobotPositionOutput.mat",
-    tablename="angles")
+    tablename="angles",
+    filename="RobotPositionOutput.csv")
     annotation (Placement(transformation(extent={{-94,-24},{-74,-4}})));
   Modelica.Mechanics.Rotational.Sensors.AngleSensor angleSensor[6]
     annotation (Placement(transformation(extent={{46,-66},{66,-46}})));
